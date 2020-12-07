@@ -100,13 +100,14 @@ public class FrontendMojo extends AbstractMojo {
         return stringBuffer.toString();
     }
 
-    public Thread readStream(final InputStream inputStream, StringBuffer stringBuffer) {
+    public Thread readStream(final InputStream inputStream, final StringBuffer stringBuffer) {
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
+                InputStreamReader isr = null;
                 try {
                     String line;
-                    InputStreamReader isr = new InputStreamReader(inputStream, isWindow() ? "GBK" : "UTF8");
+                    isr = new InputStreamReader(inputStream, isWindow() ? "GBK" : "UTF8");
                     BufferedReader br = new BufferedReader(isr);
                     while ((line = br.readLine()) != null) {
                         stringBuffer.append(line);
@@ -114,6 +115,19 @@ public class FrontendMojo extends AbstractMojo {
                     }
                 } catch (IOException e) {
                     getLog().info(e);
+                } finally {
+                    try {
+                        if (inputStream != null) {
+                            inputStream.close();
+                        }
+                    } catch (Exception e) {
+                    }
+                    try {
+                        if (isr != null) {
+                            isr.close();
+                        }
+                    } catch (Exception e) {
+                    }
                 }
             }
         });
