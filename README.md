@@ -2,9 +2,9 @@
 
 ## maven-plugin-frontend
 
-```
 maven-plugin-frontend is maven frontend build plugin. It's run nodejs project install & build script and copy builded resources into jar.
-```
+
+
 ## usage
 
 ```
